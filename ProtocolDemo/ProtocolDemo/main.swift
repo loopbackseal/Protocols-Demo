@@ -1,76 +1,54 @@
-//
-//  main.swift
-//  ProtocolDemo
-//
-//  Created by Young Soo Hwang on 2022/01/11.
-//
 
-protocol CanFly {
-    func fly()
+protocol AdvancedLifeSupport {
+    func performCPR()
 }
 
-class Bird {
+class EmergencyCallHandler {
+    var delegate: AdvancedLifeSupport?
     
-    var isFemale = true
-    
-    func layEgg() {
-        if isFemale {
-            print("The bird makes a new bird in a shell.")
-        } else {
-            print("He can't lay eggs.")
-        }
+    func assessSituation() {
+        print("Can you tell me what happenend?")
     }
     
+    func medicalEmergency() {
+        delegate?.performCPR()
+    }
 }
 
-class Eagle: Bird, CanFly {
-    func fly() {
-        print("The eagle fly into sky")
+struct Paramedic: AdvancedLifeSupport {
+    
+    init(handler: EmergencyCallHandler) {
+        handler.delegate = self
+    }
+    func performCPR() {
+        print("The paramedic does chest compressions, 30 per second.")
+    }
+}
+
+class Doctor: AdvancedLifeSupport {
+    
+    func performCPR() {
+        print("The doctor does chest compressions, 30 per second.")
     }
     
-    func soar() {
-        print("The eagle glides in the air using air currents.")
+    func useStethescope() {
+        print("Listening for heart sounds")
     }
 }
 
-class Penguin: Bird {
-    func swim() {
-        print("The penguin paddles through the water.")
+class Surgeon: Doctor {
+    override func performCPR() {
+        super.performCPR()
+        print("Sings staying alive by the BeeGees")
+    }
+    
+    func useElectricDrill() {
+        print("Whirrr....")
     }
 }
 
-struct FlyingMuseum {
-    func flyingDemo(flyingObject: CanFly) {
-        flyingObject.fly()
-    }
-}
+let yohwang = EmergencyCallHandler()
+let jaehwkim = Paramedic(handler: yohwang)
 
-struct Airplane: CanFly {
-    func fly() {
-        print("The airplane uses its engine to lift off into the air.")
-    }
-}
-
-let myEagle = Eagle()
-myEagle.fly()
-myEagle.layEgg()
-myEagle.soar()
-myEagle.isFemale = false
-myEagle.layEgg()
-
-let myPenguin = Penguin()
-//myPenguin.fly()
-myPenguin.swim()
-myPenguin.layEgg()
-
-let museum = FlyingMuseum()
-museum.flyingDemo(flyingObject: myEagle)
-
-let airplane = Airplane()
-airplane.fly()
-
-/* class ClassName : SuperClass, FirstProtocol, AdditionalProtocol {
-    var something
- }
- That's how we use UITextFieldDelegate as First Protocol
- */
+yohwang.assessSituation()
+yohwang.medicalEmergency()
